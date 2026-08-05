@@ -1,0 +1,84 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800&family=Tajawal:wght@400;500;700&display=swap");
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Cairo", sans-serif;
+  --font-body: "Tajawal", sans-serif;
+
+  --color-paper: #f7f5f1;
+  --color-paper-dim: #efece5;
+  --color-ink: #1c1b1a;
+  --color-ink-soft: #5b5751;
+  --color-line: #e2ddd3;
+
+  --color-accent: #2f6f5e;
+  --color-accent-soft: #e4efec;
+  --color-amber: #d9a441;
+  --color-amber-soft: #faf1de;
+  --color-clay: #b8542c;
+  --color-clay-soft: #f6e8e0;
+  --color-blue: #3d6b8c;
+  --color-blue-soft: #e4edf3;
+
+  --color-paper-d: #15181a;
+  --color-paper-dim-d: #1d2124;
+  --color-ink-d: #e8e6e1;
+  --color-ink-soft-d: #9b968c;
+  --color-line-d: #2a2f33;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  direction: rtl;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  overscroll-behavior-y: none;
+}
+
+html.dark body {
+  background-color: var(--color-paper-d);
+  color: var(--color-ink-d);
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+.scroll-quiet::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.scroll-quiet::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 4px;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
