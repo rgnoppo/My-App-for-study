@@ -142,8 +142,7 @@ export function SettingsPage() {
           <Row label="الوضع الداكن" right={<Toggle on={dark} onClick={toggle} />} />
         </Card>
 
-        {sync.isConfigured && (
-          <div>
+        <div>
             <p className="text-[12px] font-medium text-ink-soft dark:text-ink-soft-d mb-2 px-1">
               المزامنة بين الأجهزة
             </p>
@@ -171,7 +170,6 @@ export function SettingsPage() {
               )}
             </Card>
           </div>
-        )}
 
         <div>
           <p className="text-[12px] font-medium text-ink-soft dark:text-ink-soft-d mb-2 px-1">
