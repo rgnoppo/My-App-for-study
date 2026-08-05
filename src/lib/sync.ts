@@ -6,7 +6,7 @@ import type { SyncTable } from "../types";
 // Field name mapping: IndexedDB uses camelCase, Postgres uses snake_case.
 // ---------------------------------------------------------------------
 
-type AnyRecord = Record<string, unknown>;
+type AnyRecord = Record<string, unknown> | object;
 
 function toSnakeRow(table: SyncTable, row: AnyRecord, userId: string): AnyRecord {
   const base: AnyRecord = { id: row.id, user_id: userId, deleted: row.deleted ?? false };
@@ -210,7 +210,7 @@ async function pullTable(table: SyncTable, userId: string, since: number): Promi
       const local = fromSnakeRow(table, remoteRow as AnyRecord);
       const existing = await localTable(table).get(local.id as string);
       const existingUpdatedAt = existing
-        ? ((existing as AnyRecord).updatedAt as number)
+        ? ((existing as unknown as Record<string, unknown>).updatedAt as number)
         : -1;
 
       if (!existing || (local.updatedAt as number) >= existingUpdatedAt) {
@@ -246,7 +246,7 @@ export async function pushFullLocalSnapshot(userId: string): Promise<void> {
   for (const table of ALL_TABLES) {
     const rows = await localTable(table).toArray();
     if (rows.length === 0) continue;
-    const payload = rows.map((r) => toSnakeRow(table, r as AnyRecord, userId));
+    const payload = rows.map((r) => toSnakeRow(table, r as unknown as AnyRecord, userId));
     const { error } = await supabase.from(table).upsert(payload);
     if (error) console.error(`Initial upload failed for ${table}`, error);
   }
