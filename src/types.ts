@@ -15,6 +15,7 @@ export const STATUS_ORDER: LessonStatus[] = [
 ];
 
 export interface Subject {
+  [key: string]: unknown;
   id: string;
   name: string;
   color: string;
@@ -26,6 +27,7 @@ export interface Subject {
 }
 
 export interface StudyNode {
+  [key: string]: unknown;
   id: string;
   subjectId: string;
   parentId: string | null;
@@ -40,6 +42,7 @@ export interface StudyNode {
 }
 
 export interface Homework {
+  [key: string]: unknown;
   id: string;
   subjectId: string;
   title: string;
@@ -59,6 +62,7 @@ export const EXAM_TYPE_LABELS: Record<ExamType, string> = {
 };
 
 export interface Exam {
+  [key: string]: unknown;
   id: string;
   subjectId: string;
   title: string;
@@ -70,6 +74,7 @@ export interface Exam {
 }
 
 export interface Mistake {
+  [key: string]: unknown;
   id: string;
   subjectId: string;
   lessonId: string | null;

@@ -10,7 +10,7 @@ import { db } from "./db";
 import { queueChange } from "../lib/sync";
 import type { SyncTable } from "../types";
 
-type AnyRecord = { id: string } & object;
+type AnyRecord = Record<string, unknown> & { id: string };
 
 export async function addRecord<T extends AnyRecord>(
   table: SyncTable,

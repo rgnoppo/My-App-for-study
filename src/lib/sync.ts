@@ -6,7 +6,7 @@ import type { SyncTable } from "../types";
 // Field name mapping: IndexedDB uses camelCase, Postgres uses snake_case.
 // ---------------------------------------------------------------------
 
-type AnyRecord = Record<string, unknown> | object;
+type AnyRecord = Record<string, unknown>;
 
 function toSnakeRow(table: SyncTable, row: AnyRecord, userId: string): AnyRecord {
   const base: AnyRecord = { id: row.id, user_id: userId, deleted: row.deleted ?? false };
