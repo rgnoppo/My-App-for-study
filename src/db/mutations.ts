@@ -10,7 +10,7 @@ import { db } from "./db";
 import { queueChange } from "../lib/sync";
 import type { SyncTable } from "../types";
 
-type AnyRecord = Record<string, unknown> & { id: string };
+type AnyRecord = { id: string } & object;
 
 export async function addRecord<T extends AnyRecord>(
   table: SyncTable,
@@ -28,7 +28,7 @@ export async function updateRecord(
   const updatedAt = Date.now();
   await db[table].update(id, { ...changes, updatedAt } as never);
   const fresh = await db[table].get(id as never);
-  if (fresh) await queueChange(table, id, fresh as AnyRecord);
+  if (fresh) await queueChange(table, id, fresh as unknown as AnyRecord);
 }
 
 export async function deleteRecord(table: SyncTable, id: string): Promise<void> {
@@ -37,7 +37,7 @@ export async function deleteRecord(table: SyncTable, id: string): Promise<void> 
   // Soft-delete: the queued payload carries deleted:true so other devices
   // (and Supabase) learn about the deletion, even though we remove the
   // row locally right away so the UI stops showing it immediately.
-  const tombstone = { ...(existing as AnyRecord), deleted: true, updatedAt: Date.now() };
+  const tombstone = { ...(existing as unknown as AnyRecord), deleted: true, updatedAt: Date.now() };
   await queueChange(table, id, tombstone);
   await db[table].delete(id as never);
 }
