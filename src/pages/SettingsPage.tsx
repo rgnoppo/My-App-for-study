@@ -128,7 +128,7 @@ export function SettingsPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto pb-10">
+    <div className="max-w-md md:max-w-2xl lg:max-w-3xl mx-auto pb-10">
       <PageHeader title="الإعدادات" />
 
       <div className="px-4 pt-4 space-y-5">

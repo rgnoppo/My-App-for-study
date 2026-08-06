@@ -62,7 +62,7 @@ export function BottomNav() {
       className="fixed bottom-0 inset-x-0 z-40 bg-paper/90 dark:bg-paper-d/90 backdrop-blur-md border-t border-line dark:border-line-d pb-[env(safe-area-inset-bottom)]"
       aria-label="التنقل الرئيسي"
     >
-      <ul className="flex items-stretch justify-between max-w-md mx-auto px-1">
+      <ul className="flex items-stretch justify-between max-w-md md:max-w-2xl lg:max-w-3xl mx-auto px-1">
         {TABS.map((tab) => (
           <li key={tab.to} className="flex-1">
             <NavLink

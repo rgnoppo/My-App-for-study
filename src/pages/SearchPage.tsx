@@ -47,7 +47,7 @@ export function SearchPage() {
     results.lessons.length + results.homework.length + results.mistakes.length;
 
   return (
-    <div className="max-w-md mx-auto pb-24">
+    <div className="max-w-md md:max-w-2xl lg:max-w-3xl mx-auto pb-24">
       <PageHeader title="بحث شامل" />
 
       <div className="px-4 pt-4">

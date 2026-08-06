@@ -44,7 +44,7 @@ export function HomePage() {
   const loading = !subjects || !homework || !exams || !mistakes || !nodes;
 
   if (loading) {
-    return <div className="max-w-md mx-auto px-4 py-6" />;
+    return <div className="max-w-md md:max-w-2xl lg:max-w-3xl mx-auto px-4 py-6" />;
   }
 
   const upcomingHomework = [...homework]
@@ -78,7 +78,7 @@ export function HomePage() {
     lastLessonPerSubject.length === 0;
 
   return (
-    <div className="max-w-md mx-auto px-4 pt-5 pb-6">
+    <div className="max-w-md md:max-w-2xl lg:max-w-3xl mx-auto px-4 pt-5 pb-6">
       <div className="mb-6 px-0.5">
         <h1 className="font-display font-extrabold text-[22px]">أهلاً 👋</h1>
         <p className="text-[13px] text-ink-soft dark:text-ink-soft-d mt-0.5">
@@ -165,7 +165,7 @@ export function HomePage() {
 
       {lastLessonPerSubject.length > 0 && (
         <Section title="آخر ما وصلت إليه">
-          <div className="grid grid-cols-1 gap-2.5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
             {lastLessonPerSubject.map(({ subject, lesson }) => (
               <Link key={subject.id} to={`/subjects/${subject.id}`}>
                 <Card className="p-3.5 flex items-center gap-3 active:bg-paper-dim dark:active:bg-paper-dim-d transition">

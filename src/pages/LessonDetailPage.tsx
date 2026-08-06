@@ -29,7 +29,7 @@ export function LessonDetailPage() {
 
   if (!subjectId || !lessonId) return <Navigate to="/subjects" replace />;
   if (lesson === null) return <Navigate to={`/subjects/${subjectId}`} replace />;
-  if (!lesson) return <div className="max-w-md mx-auto px-4 py-6" />;
+  if (!lesson) return <div className="max-w-md md:max-w-2xl lg:max-w-3xl mx-auto px-4 py-6" />;
 
   const setStatus = (status: LessonStatus) => {
     updateRecord("nodes", lessonId, { status });
@@ -42,14 +42,14 @@ export function LessonDetailPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto pb-10">
+    <div className="max-w-md md:max-w-2xl lg:max-w-3xl mx-auto pb-10">
       <PageHeader title={lesson.title} back />
 
       <div className="px-4 pt-4">
         <p className="text-[13px] font-medium text-ink-soft dark:text-ink-soft-d mb-2">
           الحالة
         </p>
-        <div className="grid grid-cols-2 gap-2 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
           {STATUS_ORDER.map((s) => (
             <button
               key={s}

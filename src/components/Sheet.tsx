@@ -31,7 +31,7 @@ export function Sheet({
         className="absolute inset-0 bg-ink/40 dark:bg-black/60 animate-[fadeIn_.15s_ease-out]"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-md bg-paper dark:bg-paper-d rounded-t-2xl max-h-[88vh] flex flex-col animate-[slideUp_.22s_cubic-bezier(0.22,1,0.36,1)] shadow-[0_-8px_30px_rgba(0,0,0,0.12)]">
+      <div className="relative w-full max-w-md md:max-w-xl bg-paper dark:bg-paper-d rounded-t-2xl max-h-[88vh] flex flex-col animate-[slideUp_.22s_cubic-bezier(0.22,1,0.36,1)] shadow-[0_-8px_30px_rgba(0,0,0,0.12)]">
         <div className="flex items-center justify-center pt-2.5 pb-1 shrink-0">
           <div className="w-9 h-1 rounded-full bg-line dark:bg-line-d" />
         </div>

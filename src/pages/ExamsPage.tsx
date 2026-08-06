@@ -47,7 +47,7 @@ export function ExamsPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto pb-24">
+    <div className="max-w-md md:max-w-2xl lg:max-w-3xl mx-auto pb-24">
       <PageHeader
         title="الامتحانات"
         action={

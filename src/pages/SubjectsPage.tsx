@@ -59,7 +59,7 @@ export function SubjectsPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto pb-6">
+    <div className="max-w-md md:max-w-2xl lg:max-w-3xl mx-auto pb-6">
       <PageHeader
         title="المواد"
         action={
@@ -82,7 +82,7 @@ export function SubjectsPage() {
         )}
 
         {subjects && subjects.length > 0 && (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {subjects.map((s) => (
               <Link key={s.id} to={`/subjects/${s.id}`} className="relative">
                 <Card className="p-4 flex flex-col items-start gap-3 active:bg-paper-dim dark:active:bg-paper-dim-d transition h-full">

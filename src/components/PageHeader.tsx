@@ -31,7 +31,7 @@ export function PageHeader({
   const navigate = useNavigate();
   return (
     <header className="sticky top-0 z-30 bg-paper/90 dark:bg-paper-d/90 backdrop-blur-md border-b border-line dark:border-line-d">
-      <div className="max-w-md mx-auto px-4 py-3.5 flex items-center gap-3">
+      <div className="max-w-md md:max-w-2xl lg:max-w-3xl mx-auto px-4 py-3.5 flex items-center gap-3">
         {back && (
           <button
             onClick={() => navigate(-1)}

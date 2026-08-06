@@ -93,7 +93,7 @@ export function SubjectDetailPage() {
 
   if (!subjectId) return <Navigate to="/subjects" replace />;
   if (subject === null) return <Navigate to="/subjects" replace />;
-  if (!subject) return <div className="max-w-md mx-auto px-4 py-6" />;
+  if (!subject) return <div className="max-w-md md:max-w-2xl lg:max-w-3xl mx-auto px-4 py-6" />;
 
   const tree = buildTree(nodes ?? []);
 
@@ -110,7 +110,7 @@ export function SubjectDetailPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto pb-24">
+    <div className="max-w-md md:max-w-2xl lg:max-w-3xl mx-auto pb-24">
       <PageHeader title={subject.name} back />
 
       <div className="px-4 pt-3 flex gap-1.5 overflow-x-auto scroll-quiet -mx-1 px-1">
