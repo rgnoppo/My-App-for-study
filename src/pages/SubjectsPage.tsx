@@ -9,6 +9,7 @@ import { EmptyState } from "../components/EmptyState";
 import { Sheet } from "../components/Sheet";
 import { Field, TextInput, PrimaryButton } from "../components/Field";
 import { SubjectIcon, SUBJECT_ICONS } from "../lib/icons";
+import { EditSubjectSheet } from "../components/EditSubjectSheet";
 import type { Subject } from "../types";
 
 const COLORS = [
@@ -35,9 +36,27 @@ function AddIcon() {
   );
 }
 
+function EditIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+      <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+    </svg>
+  );
+}
+
 export function SubjectsPage() {
   const subjects = useLiveQuery(() => db.subjects.orderBy("order").toArray());
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [editSubject, setEditSubject] = useState<Subject | null>(null);
+  const [editSheetOpen, setEditSheetOpen] = useState(false);
+
+  const openEdit = (e: React.MouseEvent, s: Subject) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setEditSubject(s);
+    setEditSheetOpen(true);
+  };
 
   return (
     <div className="max-w-md mx-auto pb-6">
@@ -65,13 +84,22 @@ export function SubjectsPage() {
         {subjects && subjects.length > 0 && (
           <div className="grid grid-cols-2 gap-3">
             {subjects.map((s) => (
-              <Link key={s.id} to={`/subjects/${s.id}`}>
+              <Link key={s.id} to={`/subjects/${s.id}`} className="relative">
                 <Card className="p-4 flex flex-col items-start gap-3 active:bg-paper-dim dark:active:bg-paper-dim-d transition h-full">
-                  <div
-                    className="w-11 h-11 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: `${s.color}22`, color: s.color }}
-                  >
-                    <SubjectIcon icon={s.icon} className="w-[22px] h-[22px]" />
+                  <div className="w-full flex items-start justify-between">
+                    <div
+                      className="w-11 h-11 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: `${s.color}22`, color: s.color }}
+                    >
+                      <SubjectIcon icon={s.icon} className="w-[22px] h-[22px]" />
+                    </div>
+                    <button
+                      onClick={(e) => openEdit(e, s)}
+                      aria-label="تعديل المادة"
+                      className="p-1.5 rounded-full text-ink-soft dark:text-ink-soft-d active:bg-paper-dim dark:active:bg-paper-dim-d"
+                    >
+                      <EditIcon />
+                    </button>
                   </div>
                   <span className="font-display font-bold text-[15px] leading-tight">
                     {s.name}
@@ -84,6 +112,11 @@ export function SubjectsPage() {
       </div>
 
       <AddSubjectSheet open={sheetOpen} onClose={() => setSheetOpen(false)} />
+      <EditSubjectSheet
+        subject={editSubject}
+        open={editSheetOpen}
+        onClose={() => { setEditSheetOpen(false); setEditSubject(null); }}
+      />
     </div>
   );
 }

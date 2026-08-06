@@ -184,14 +184,15 @@ async function pushQueue(userId: string): Promise<void> {
 // ---------------------------------------------------------------------
 const LAST_PULL_KEY = "study-os-last-pull";
 
-function getLastPull(): number {
-  return Number(localStorage.getItem(LAST_PULL_KEY) ?? "0");
+function getLastPull(): string {
+  // Returns an ISO timestamp string, or epoch for first-ever pull.
+  return localStorage.getItem(LAST_PULL_KEY) ?? new Date(0).toISOString();
 }
-function setLastPull(ts: number): void {
-  localStorage.setItem(LAST_PULL_KEY, String(ts));
+function setLastPull(ts: string): void {
+  localStorage.setItem(LAST_PULL_KEY, ts);
 }
 
-async function pullTable(table: SyncTable, userId: string, since: number): Promise<void> {
+async function pullTable(table: SyncTable, userId: string, since: string): Promise<void> {
   if (!supabase) return;
   const { data, error } = await supabase
     .from(table)
@@ -232,7 +233,9 @@ export async function runSync(userId: string): Promise<void> {
   if (!supabase) return;
   await pushQueue(userId);
   const since = getLastPull();
-  const startedAt = Date.now();
+  // Capture start time as ISO string BEFORE pulling so we don't miss rows
+  // written between the pull and us saving the cursor.
+  const startedAt = new Date().toISOString();
   for (const table of ALL_TABLES) {
     await pullTable(table, userId, since);
   }

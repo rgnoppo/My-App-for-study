@@ -6,6 +6,8 @@ import { PageHeader } from "../components/PageHeader";
 import { Card } from "../components/Card";
 import { EmptyState } from "../components/EmptyState";
 import { AddHomeworkSheet } from "../components/AddHomeworkSheet";
+import { EditHomeworkSheet } from "../components/EditHomeworkSheet";
+import type { Homework } from "../types";
 
 function PlusIcon() {
   return (
@@ -15,9 +17,20 @@ function PlusIcon() {
   );
 }
 
+function EditIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+      <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+    </svg>
+  );
+}
+
 export function HomeworkPage() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [filterSubject, setFilterSubject] = useState<string>("all");
+  const [editHw, setEditHw] = useState<Homework | null>(null);
+  const [editSheetOpen, setEditSheetOpen] = useState(false);
 
   const subjects = useLiveQuery(() => db.subjects.orderBy("order").toArray());
   const homework = useLiveQuery(() => db.homework.toArray());
@@ -30,6 +43,11 @@ export function HomeworkPage() {
       if (a.done !== b.done) return a.done ? 1 : -1;
       return a.dueDate.localeCompare(b.dueDate);
     });
+
+  const openEdit = (hw: Homework) => {
+    setEditHw(hw);
+    setEditSheetOpen(true);
+  };
 
   return (
     <div className="max-w-md mx-auto pb-24">
@@ -97,6 +115,13 @@ export function HomeworkPage() {
                   <span className="text-[12px] text-ink-soft dark:text-ink-soft-d shrink-0">
                     {new Date(h.dueDate).toLocaleDateString("ar-EG", { day: "numeric", month: "short" })}
                   </span>
+                  <button
+                    onClick={() => openEdit(h)}
+                    aria-label="تعديل الواجب"
+                    className="shrink-0 p-1.5 rounded-full text-ink-soft dark:text-ink-soft-d active:bg-paper-dim dark:active:bg-paper-dim-d"
+                  >
+                    <EditIcon />
+                  </button>
                 </li>
               ))}
             </ul>
@@ -105,6 +130,11 @@ export function HomeworkPage() {
       </div>
 
       <AddHomeworkSheet open={sheetOpen} onClose={() => setSheetOpen(false)} />
+      <EditHomeworkSheet
+        homework={editHw}
+        open={editSheetOpen}
+        onClose={() => { setEditSheetOpen(false); setEditHw(null); }}
+      />
     </div>
   );
 }

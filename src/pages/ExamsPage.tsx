@@ -5,7 +5,9 @@ import { PageHeader } from "../components/PageHeader";
 import { Card } from "../components/Card";
 import { EmptyState } from "../components/EmptyState";
 import { AddExamSheet } from "../components/AddExamSheet";
+import { EditExamSheet } from "../components/EditExamSheet";
 import { EXAM_TYPE_LABELS } from "../types";
+import type { Exam } from "../types";
 
 function PlusIcon() {
   return (
@@ -15,9 +17,20 @@ function PlusIcon() {
   );
 }
 
+function EditIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+      <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+    </svg>
+  );
+}
+
 export function ExamsPage() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [filterSubject, setFilterSubject] = useState<string>("all");
+  const [editExam, setEditExam] = useState<Exam | null>(null);
+  const [editSheetOpen, setEditSheetOpen] = useState(false);
 
   const subjects = useLiveQuery(() => db.subjects.orderBy("order").toArray());
   const exams = useLiveQuery(() => db.exams.toArray());
@@ -27,6 +40,11 @@ export function ExamsPage() {
   const filtered = (exams ?? [])
     .filter((e) => filterSubject === "all" || e.subjectId === filterSubject)
     .sort((a, b) => a.date.localeCompare(b.date));
+
+  const openEdit = (exam: Exam) => {
+    setEditExam(exam);
+    setEditSheetOpen(true);
+  };
 
   return (
     <div className="max-w-md mx-auto pb-24">
@@ -75,6 +93,13 @@ export function ExamsPage() {
                   <span className="text-[12px] text-ink-soft dark:text-ink-soft-d shrink-0">
                     {new Date(e.date).toLocaleDateString("ar-EG", { day: "numeric", month: "short" })}
                   </span>
+                  <button
+                    onClick={() => openEdit(e)}
+                    aria-label="تعديل الامتحان"
+                    className="shrink-0 p-1.5 rounded-full text-ink-soft dark:text-ink-soft-d active:bg-paper-dim dark:active:bg-paper-dim-d"
+                  >
+                    <EditIcon />
+                  </button>
                 </li>
               ))}
             </ul>
@@ -83,6 +108,11 @@ export function ExamsPage() {
       </div>
 
       <AddExamSheet open={sheetOpen} onClose={() => setSheetOpen(false)} />
+      <EditExamSheet
+        exam={editExam}
+        open={editSheetOpen}
+        onClose={() => { setEditSheetOpen(false); setEditExam(null); }}
+      />
     </div>
   );
 }
