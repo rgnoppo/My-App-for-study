@@ -184,15 +184,18 @@ async function pushQueue(userId: string): Promise<void> {
 // ---------------------------------------------------------------------
 const LAST_PULL_KEY = "study-os-last-pull";
 
-function getLastPull(): string {
-  // Returns an ISO timestamp string, or epoch for first-ever pull.
-  return localStorage.getItem(LAST_PULL_KEY) ?? new Date(0).toISOString();
+function getLastPull(): number {
+  // Returns a millisecond epoch timestamp, matching the bigint
+  // updated_at column in Postgres. 0 means "never pulled before".
+  const raw = localStorage.getItem(LAST_PULL_KEY);
+  const parsed = raw ? Number(raw) : 0;
+  return Number.isFinite(parsed) ? parsed : 0;
 }
-function setLastPull(ts: string): void {
-  localStorage.setItem(LAST_PULL_KEY, ts);
+function setLastPull(ts: number): void {
+  localStorage.setItem(LAST_PULL_KEY, String(ts));
 }
 
-async function pullTable(table: SyncTable, userId: string, since: string): Promise<void> {
+async function pullTable(table: SyncTable, userId: string, since: number): Promise<void> {
   if (!supabase) return;
   const { data, error } = await supabase
     .from(table)
@@ -233,9 +236,9 @@ export async function runSync(userId: string): Promise<void> {
   if (!supabase) return;
   await pushQueue(userId);
   const since = getLastPull();
-  // Capture start time as ISO string BEFORE pulling so we don't miss rows
-  // written between the pull and us saving the cursor.
-  const startedAt = new Date().toISOString();
+  // Capture start time BEFORE pulling so we don't miss rows written
+  // between the pull and us saving the cursor.
+  const startedAt = Date.now();
   for (const table of ALL_TABLES) {
     await pullTable(table, userId, since);
   }

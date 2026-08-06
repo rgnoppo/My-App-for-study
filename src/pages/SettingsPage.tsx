@@ -115,7 +115,7 @@ export function SettingsPage() {
       setTimeout(() => setConfirmingReset(false), 4000);
       return;
     }
-    await resetAllData();
+    await resetAllData(sync.userId);
     setConfirmingReset(false);
     setStatus("تم مسح كل البيانات");
     setTimeout(() => setStatus(null), 3000);

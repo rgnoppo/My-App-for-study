@@ -56,7 +56,6 @@ export function SearchPage() {
             <SearchIcon />
           </span>
           <input
-            autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='ابحث في كل التطبيق... مثال: "فاعل"'

@@ -1,5 +1,8 @@
 import { db } from "./db";
-import type { BackupData } from "../types";
+import type { BackupData, SyncTable } from "../types";
+import { queueChange, runSync } from "../lib/sync";
+
+const SYNC_TABLES: SyncTable[] = ["subjects", "nodes", "homework", "exams", "mistakes"];
 
 export async function exportBackup(): Promise<void> {
   const [subjects, nodes, homework, exams, mistakes] = await Promise.all([
@@ -68,7 +71,19 @@ export async function importBackup(file: File): Promise<void> {
   );
 }
 
-export async function resetAllData(): Promise<void> {
+export async function resetAllData(userId?: string | null): Promise<void> {
+  // If sync is on, queue a tombstone for every existing row BEFORE wiping
+  // locally, so the deletion propagates to Supabase and every other
+  // device instead of only clearing this device's local copy.
+  if (userId) {
+    for (const table of SYNC_TABLES) {
+      const rows = await db[table].toArray();
+      for (const row of rows) {
+        await queueChange(table, row.id, { ...row, deleted: true, updatedAt: Date.now() });
+      }
+    }
+  }
+
   await db.transaction(
     "rw",
     db.subjects,
@@ -86,4 +101,8 @@ export async function resetAllData(): Promise<void> {
       ]);
     }
   );
+
+  if (userId) {
+    await runSync(userId);
+  }
 }
